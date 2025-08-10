@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>診断結果</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container center">
+    <h2>診断結果</h2>
+    <p>あなたの恋愛偏差値は...</p>
+    <h1 id="score"></h1>
+    <p id="type"></p>
+    <button onclick="location.href='index.html'" class="start-btn">もう一度診断</button>
+  </div>
+
+  <script>
+    const score = localStorage.getItem("finalScore");
+    document.getElementById("score").innerText = score;
+
+    let type = "";
+    if (score >= 65) type = "積極的アプローチ型";
+    else if (score >= 50) type = "バランス型";
+    else type = "慎重観察型";
+
+    document.getElementById("type").innerText = `タイプ：${type}`;
+  </script>
+</body>
+</html>
