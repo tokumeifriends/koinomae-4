@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIと恋愛トーク</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="chat-container">
+    <div id="chatWindow"></div>
+    <div class="input-container">
+      <input type="text" id="chatInput" placeholder="メッセージを入力...">
+      <button onclick="sendMessage()">送信</button>
+    </div>
+  </div>
+
+  <script>
+    let chatHistory = [];
+    const chatWindow = document.getElementById("chatWindow");
+
+    function renderChat() {
+      chatWindow.innerHTML = chatHistory.map(m => `<p><strong>${m.role==='user'?'あなた':'みな'}:</strong> ${m.content}</p>`).join("");
+    }
+
+    async function sendMessage() {
+      const userMsg = document.getElementById("chatInput").value;
+      if (!userMsg) return;
+
+      chatHistory.push({ role: "user", content: userMsg });
+      renderChat();
+
+      const res = await fetch("http://localhost:3000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: chatHistory,
+          formScore: Number(localStorage.getItem("formScore"))
+        })
+      });
+      const data = await res.json();
+
+      chatHistory.push({ role: "assistant", content: data.reply });
+      localStorage.setItem("aiScore", data.opennessScore);
+      localStorage.setItem("finalScore", data.偏差値);
+      renderChat();
+    }
+  </script>
+</body>
+</html>
