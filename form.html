@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>恋愛診断フォーム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>恋愛診断</h2>
+    <form id="quizForm">
+      <div id="questions"></div>
+      <button type="submit" class="next-btn">AIと話す</button>
+    </form>
+  </div>
+
+  <script>
+    const quizData = [
+      { q:"気になる人に対して最初に浮かぶ感情は？", a:0, b:10, c:5 },
+      { q:"恋愛で一番大事だと思うものは？", a:0, b:10, c:5 },
+      { q:"LINEの返信頻度は？", a:0, b:10, c:5 },
+      { q:"デートに誘うとしたら？", a:0, b:10, c:5 },
+      { q:"自分は恋愛に向いている？", a:0, b:10, c:5 },
+      { q:"好きな人ができたらまずすることは？", a:0, b:10, c:5 },
+      { q:"理想の関係性は？", a:0, b:10, c:5 },
+      { q:"『好きな人いるの？』と聞かれたら？", a:0, b:10, c:5 },
+      { q:"恋愛での自分の強みは？", a:0, b:10, c:5 },
+      { q:"これまでの恋愛経験は？", a:0, b:10, c:5 }
+    ];
+
+    const container = document.getElementById("questions");
+
+    quizData.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <p>${i+1}. ${q.q}</p>
+        <label><input type="radio" name="q${i}" value="${q.a}" required> A</label>
+        <label><input type="radio" name="q${i}" value="${q.b}"> B</label>
+        <label><input type="radio" name="q${i}" value="${q.c}"> C</label>
+      `;
+      container.appendChild(div);
+    });
+
+    document.getElementById("quizForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      let score = 0;
+      for (let val of data.values()) {
+        score += Number(val);
+      }
+      localStorage.setItem("formScore", score);
+      location.href = "AIchat.html";
+    });
+  </script>
+</body>
+</html>
